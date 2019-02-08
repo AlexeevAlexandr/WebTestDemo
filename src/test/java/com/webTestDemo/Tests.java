@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 
 public class Tests {
 
-    private static BookingPage bookingPage;
     private static WebDriver driver;
 
     @BeforeClass
@@ -25,9 +24,6 @@ public class Tests {
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        String url = "https://www.booking.com/";
-        driver.get(url);
-        bookingPage = new BookingPage(driver);
     }
 
     @After
@@ -42,6 +38,9 @@ public class Tests {
 
     @Test
     public void test1() {
+        driver.get("https://www.booking.com/");
+        BookingPage bookingPage = new BookingPage(driver);
+
         //set data
         bookingPage.enterCity("New York");
         bookingPage.enterArrivalDate("09", "01", "2019");
@@ -56,5 +55,23 @@ public class Tests {
         assertEquals(expected, bookingPage.getDataFromBookingPage());
     }
 
+    @Test
+    public void test2(){
+        driver.get("https://www.booking.com/");
+        FlightsPage flightsPage = new FlightsPage(driver);
 
+        //set data
+        from.enterCity("American Museum of Natural History, New York, NY, USA");
+        till.enterArrivalDate("Santo Domingo - Las Americas International Airport");
+        date.enterDepartureDate("09", "30", "2019");
+        time.enterDepartureDate("09", "30", "2019");
+        submit.clickSubmit();
+
+        //validate data
+        List expected =  asList(
+                "New York",
+                "9", "1","2019",
+                "9","30","2019");
+        assertEquals(expected, bookingPage.getDataFromBookingPage());
+    }
 }
