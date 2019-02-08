@@ -7,10 +7,8 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
@@ -53,7 +51,7 @@ public class Tests {
         //validate data
         List expected =  asList(
                 "New York",
-                "9","1","2019",
+                "9", "1","2019",
                 "9","30","2019");
         assertEquals(expected, bookingPage.getDataFromBookingPage());
     }
