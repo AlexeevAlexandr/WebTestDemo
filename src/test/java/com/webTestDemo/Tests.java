@@ -7,10 +7,14 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class Tests {
 
@@ -18,12 +22,19 @@ public class Tests {
 
     @BeforeClass
     public static void setup(){
-        System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver/chromedriver.exe");
+        //set driver
+        System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver/chromedriver");
+
+        //set language
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--lang=en");
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("intl.accept_languages", "en-en,en");
+        options.setExperimentalOption("prefs", prefs);
+
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get("https://www.booking.com/");
     }
 
     @After
@@ -38,40 +49,43 @@ public class Tests {
 
     @Test
     public void test1() {
-        driver.get("https://www.booking.com/");
         BookingPage bookingPage = new BookingPage(driver);
 
         //set data
         bookingPage.enterCity("New York");
-        bookingPage.enterArrivalDate("09", "01", "2019");
         bookingPage.enterDepartureDate("09", "30", "2019");
-        bookingPage.clickSubmit();
+        bookingPage.enterArrivalDate("09", "01", "2019");
+        bookingPage.submitForm();
 
         //validate data
         List expected =  asList(
                 "New York",
                 "9", "1","2019",
                 "9","30","2019");
-        assertEquals(expected, bookingPage.getDataFromBookingPage());
+        assertEquals(expected, bookingPage.getDataForVerification());
     }
 
     @Test
-    public void test2(){
-        driver.get("https://www.booking.com/");
+    public void test2() throws InterruptedException {
+        new BookingPage(driver).switchOnFlightPage();
+
+        //switch the driver to FlightPage url
+        for(String winHandle : driver.getWindowHandles()){
+            driver.switchTo().window(winHandle);
+        }
+        Thread.sleep(2000);
+
         FlightsPage flightsPage = new FlightsPage(driver);
+        flightsPage.selectOneWay();
+        Thread.sleep(1000);
+        assertTrue(flightsPage.isSelectedOneWay());
 
-        //set data
-        from.enterCity("American Museum of Natural History, New York, NY, USA");
-        till.enterArrivalDate("Santo Domingo - Las Americas International Airport");
-        date.enterDepartureDate("09", "30", "2019");
-        time.enterDepartureDate("09", "30", "2019");
-        submit.clickSubmit();
+        flightsPage.enterData("Kiev", "Tokio");
+        List actualData = flightsPage.getDataForVerification();
 
-        //validate data
-        List expected =  asList(
-                "New York",
-                "9", "1","2019",
-                "9","30","2019");
-        assertEquals(expected, bookingPage.getDataFromBookingPage());
+        List expected =  asList("Kiev (IEV)", "Devils Lake (DVL)", "Sun 1/9");
+        assertEquals(expected, actualData);
+
+        flightsPage.submitForm();
     }
 }

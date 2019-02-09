@@ -4,35 +4,84 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-class FlightsPage extends PageObject{
+import java.util.ArrayList;
+import java.util.List;
+
+class FlightsPage extends PageObject {
 
     FlightsPage(WebDriver driver) {
         super(driver);
     }
 
-    @FindBy(id = "Zp56-origin")
+    @FindBy(name = "origin")
     private WebElement origin;
 
-    @FindBy(id = "Zp56-destination")
+    @FindBy(name = "destination")
     private WebElement destination;
 
-    @FindBy(id = "Zp56-depart")
+    @FindBy(xpath = "//div[@aria-label='September 1']")
     private WebElement departDate;
 
-    @FindBy(id = "Zp56-return")
-    private WebElement returnDate;
+    @FindBy(xpath = "//div[@class='navItem nextMonth']")
+    private WebElement clickNextMonth;
 
-    @FindBy(id = "Zp56-submit")
+    @FindBy(xpath = "//div[@aria-label='September 1']")
+    private WebElement setDate;
+
+    @FindBy(xpath = "//label[@title='One-way']")
+    private WebElement oneWay;
+
+    @FindBy(xpath = "//div[@class='dateInput size-l input-flat']")
+    private WebElement checkDate;
+
+    @FindBy(xpath = "//button[@type='submit']")
     private WebElement submit;
 
-    void enterCity(String origin, String destinetion, String departDate, String returnDate) {
-        this.origin.sendKeys();
-        this.destination.sendKeys();
-        this.departDate.sendKeys();
-        this.returnDate.sendKeys();
+    @FindBy(xpath = "//div[@class='keel-grid dateRangeGrid']")
+    private WebElement datePicker;
+
+    void selectOneWay() {
+        this.oneWay.click();
     }
 
-    void submit(){
+    void enterData(String origin, String destinetion) throws InterruptedException {
+        this.origin.clear();
+        this.origin.sendKeys(origin);
+        this.origin.click();
+        Thread.sleep(1000);
+        this.destination.clear();
+        this.destination.sendKeys(destinetion);
+        this.destination.click();
+        Thread.sleep(1000);
+
+        this.datePicker.click();
+        setNextMonth().click();
+    }
+
+    private WebElement setNextMonth(){
+        String value = "";
+        while (! value.equals("September 1")) {
+        try {
+            value = this.setDate.getAttribute("aria-label");
+        }catch (Exception ignored){}
+            this.clickNextMonth.click();
+        }
+        return departDate;
+    }
+
+    boolean isSelectedOneWay(){
+        return oneWay.isEnabled();
+    }
+
+    List getDataForVerification() {
+        List<String> data = new ArrayList<>();
+        data.add(origin.getAttribute("value"));
+        data.add(destination.getAttribute("value"));
+        data.add(checkDate.getText());
+        return data;
+    }
+
+    void submitForm() {
         this.submit.click();
     }
 }

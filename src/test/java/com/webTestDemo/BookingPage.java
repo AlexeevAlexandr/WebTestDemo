@@ -37,27 +37,30 @@ class BookingPage extends PageObject{
     @FindBy(xpath = "//div[@class='xp__button']")
     private WebElement submit;
 
+    @FindBy(linkText = "Flights")
+    private WebElement switchOnFlightPage;
+
     void enterCity(String city) {
         this.city.sendKeys(city);
     }
 
     void enterArrivalDate(String month, String day, String year) {
-        this.checkin_month.sendKeys(month);
         this.checkin_monthday.sendKeys(day);
+        this.checkin_month.sendKeys(month);
         this.checkin_year.sendKeys(year);
     }
 
     void enterDepartureDate(String month, String day, String year) {
-        this.checkout_month.sendKeys(month);
         this.checkout_monthday.sendKeys(day);
+        this.checkout_month.sendKeys(month);
         this.checkout_year.sendKeys(year);
     }
 
-    void clickSubmit(){
+    void submitForm(){
         this.submit.click();
     }
 
-    List getDataFromBookingPage() {
+    List getDataForVerification() {
         List<String> list = new ArrayList<>();
         list.add(city.getAttribute("value"));
         list.add(checkin_month.getAttribute("value"));
@@ -67,5 +70,9 @@ class BookingPage extends PageObject{
         list.add(checkout_monthday.getAttribute("value"));
         list.add(checkout_year.getAttribute("value"));
         return list;
+    }
+
+    void switchOnFlightPage(){
+        this.switchOnFlightPage.click();
     }
 }
