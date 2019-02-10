@@ -25,7 +25,7 @@ public class Tests {
     @BeforeClass
     public static void setup(){
         //set driver
-        System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver/chromedriver");
+        System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver/chromedriver.exe");
 
         //set language
         ChromeOptions options = new ChromeOptions();
