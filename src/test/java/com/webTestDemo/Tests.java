@@ -1,9 +1,9 @@
 package com.webTestDemo;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.webTestDemo.pages.BookingPage;
+import com.webTestDemo.pages.FlightsPage;
+import org.junit.*;
+import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -14,8 +14,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
 
     private static WebDriver driver;
@@ -69,7 +71,7 @@ public class Tests {
     public void test2() throws InterruptedException {
         new BookingPage(driver).switchOnFlightPage();
 
-        //switch the driver to FlightPage url
+        //switch the driver on FlightPage url
         for(String winHandle : driver.getWindowHandles()){
             driver.switchTo().window(winHandle);
         }

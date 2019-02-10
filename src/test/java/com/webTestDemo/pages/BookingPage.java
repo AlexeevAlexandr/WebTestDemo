@@ -1,4 +1,4 @@
-package com.webTestDemo;
+package com.webTestDemo.pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,9 +7,9 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-class BookingPage extends PageObject{
+public class BookingPage extends PageObject{
 
-    BookingPage(WebDriver driver) {
+    public BookingPage(WebDriver driver) {
         super(driver);
     }
 
@@ -40,27 +40,27 @@ class BookingPage extends PageObject{
     @FindBy(linkText = "Flights")
     private WebElement switchOnFlightPage;
 
-    void enterCity(String city) {
+    public void enterCity(String city) {
         this.city.sendKeys(city);
     }
 
-    void enterArrivalDate(String month, String day, String year) {
+    public void enterArrivalDate(String month, String day, String year) {
         this.checkin_monthday.sendKeys(day);
         this.checkin_month.sendKeys(month);
         this.checkin_year.sendKeys(year);
     }
 
-    void enterDepartureDate(String month, String day, String year) {
+    public void enterDepartureDate(String month, String day, String year) {
         this.checkout_monthday.sendKeys(day);
         this.checkout_month.sendKeys(month);
         this.checkout_year.sendKeys(year);
     }
 
-    void submitForm(){
+    public void submitForm(){
         this.submit.click();
     }
 
-    List getDataForVerification() {
+    public List getDataForVerification() {
         List<String> list = new ArrayList<>();
         list.add(city.getAttribute("value"));
         list.add(checkin_month.getAttribute("value"));
@@ -72,7 +72,7 @@ class BookingPage extends PageObject{
         return list;
     }
 
-    void switchOnFlightPage(){
+    public void switchOnFlightPage(){
         this.switchOnFlightPage.click();
     }
 }

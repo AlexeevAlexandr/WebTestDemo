@@ -1,4 +1,4 @@
-package com.webTestDemo;
+package com.webTestDemo.pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,9 +7,9 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-class FlightsPage extends PageObject {
+public class FlightsPage extends PageObject {
 
-    FlightsPage(WebDriver driver) {
+    public FlightsPage(WebDriver driver) {
         super(driver);
     }
 
@@ -40,11 +40,11 @@ class FlightsPage extends PageObject {
     @FindBy(xpath = "//div[@class='keel-grid dateRangeGrid']")
     private WebElement datePicker;
 
-    void selectOneWay() {
+    public void selectOneWay() {
         this.oneWay.click();
     }
 
-    void enterData(String origin, String destinetion) throws InterruptedException {
+    public void enterData(String origin, String destinetion) throws InterruptedException {
         this.origin.clear();
         this.origin.sendKeys(origin);
         this.origin.click();
@@ -69,11 +69,11 @@ class FlightsPage extends PageObject {
         return departDate;
     }
 
-    boolean isSelectedOneWay(){
+    public boolean isSelectedOneWay(){
         return oneWay.isEnabled();
     }
 
-    List getDataForVerification() {
+    public List getDataForVerification() {
         List<String> data = new ArrayList<>();
         data.add(origin.getAttribute("value"));
         data.add(destination.getAttribute("value"));
@@ -81,7 +81,7 @@ class FlightsPage extends PageObject {
         return data;
     }
 
-    void submitForm() {
+    public void submitForm() {
         this.submit.click();
     }
 }
